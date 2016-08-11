@@ -1,5 +1,6 @@
 (ns ui.core
   (:require [reagent.core :as reagent :refer [atom]]
+            [goog.string :as gstring]
             [clojure.string :as string :refer [split-lines]]))
 
 (def join-lines (partial string/join "\n"))
@@ -27,20 +28,35 @@
       (.on (.-stdout p) "data" append-to-out))
     (reset! command "")))
 
+#_(-> (js/$ "h2.modal-title")
+    (.css (clj->js {:display "none"})))
+
 (defn root-component []
   [:div
-   [:div.logos
-    [:img.electron {:src "img/electron-logo.png"}]
-    [:img.cljs {:src "img/cljs-logo.svg"}]
-    [:img.reagent {:src "img/reagent-logo.png"}]]
-   [:pre "Versions:"
-    [:p (str "Node     " js/process.version)]
-    [:p (str "Electron " ((js->clj js/process.versions) "electron"))]
-    [:p (str "Chromium " ((js->clj js/process.versions) "chrome"))]]
-   [:button
+   [:div.container
+    [:button.btn.btn-danger
+     {:id "theModalBtn"
+      :data-toggle "modal"
+      :data-target "#modalDlg"}
+     "Push me!"]]
+   [:div.modal.fade {:id "modalDlg"}
+    [:div.modal-dialog
+     [:div.modal-content
+      [:div.modal-header
+       [:button.close
+        {:type "button"
+         :data-dismiss "modal"}
+        (gstring/unescapeEntities "&times;")]
+       [:h2.modal-title
+        "Header"]]
+      [:div.modal-body
+       [:p "Hey, tv girl"]]]]]
+
+   #_[:button
     {:on-click #(swap! state inc)}
     (str "Clicked " @state " times")]
-   [:p
+
+   #_[:p
     [:form
      {:on-submit (fn [e]
                    (.preventDefault e)
@@ -52,7 +68,7 @@
                             (.-value (.-target e))))
        :value @command
        :placeholder "type in shell command"}]]]
-   [:pre (join-lines (take 100 (reverse (split-lines @shell-result))))]])
+   #_[:pre (join-lines (take 100 (reverse (split-lines @shell-result))))]])
 
 (reagent/render
   [root-component]

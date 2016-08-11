@@ -1,4 +1,7 @@
 target/
-resources/
+resources/main.js
+resources/public/js/ui-out/
+resources/public/js/ui-core.js
 *-init.clj
 figwheel_server.log
+package/

@@ -1,18 +1,28 @@
-(defproject hello-electron "0.1.0-SNAPSHOT"
+(defproject tv-girl "0.0.1-SNAPSHOT"
   :source-paths ["src"]
-  :description "A hello world application for electron"
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.8.40"]
-                 [figwheel "0.5.2"]
-                 [reagent "0.5.1"]
-                 [ring/ring-core "1.4.0"]]
-  :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.2"]]
+  :description "A playlist editor for the movie player 'WinDVR'."
 
-  :clean-targets ^{:protect false} ["resources/main.js"
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.89"]
+                 [reagent "0.6.0-rc"]
+                 [ring/ring-core "1.5.0"]]
+
+  :clean-targets ^{:protect false} [:target-path
+                                    "resources/main.js"
                                     "resources/public/js/ui-core.js"
                                     "resources/public/js/ui-core.js.map"
                                     "resources/public/js/ui-out"]
+  :profiles {:dev
+             {:dependencies [[com.cemerick/piggieback "0.2.1"]
+                             [org.clojure/tools.nrepl "0.2.10"]
+                             [figwheel-sidecar "0.5.2"]]
+              :plugins [[lein-cljsbuild "1.1.3"]
+                        [lein-figwheel "0.5.4-7"]
+                        [cider/cider-nrepl "0.13.0"]]
+
+              :repl-options {:nrepl-middleware
+                             [cemerick.piggieback/wrap-cljs-repl]}}}
+
   :cljsbuild
   {:builds
    [{:source-paths ["electron_src"]
@@ -46,4 +56,7 @@
                 :main "ui.core"}}]}
   :figwheel {:http-server-root "public"
              :ring-handler tools.figwheel-middleware/app
-             :server-port 3449})
+             :css-dirs ["resources/public/css"]
+             :nrepl-port 7888
+             :server-port 3449}
+  )
