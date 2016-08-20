@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>TV-Girl</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
-  </head>
-  <body>
-    <!-- We are using node.js <script>document.write(process.version)</script> -->
-    <!-- and electron <script>document.write(process.versions['electron'])</script>. -->
-  </body>
-  <script type="text/javascript" src="js/ui-core.js"></script>
-  <script>
-      window.$ = require('./js/jquery.min');
-      window.jQuery = window.$; // bootstrap needs this
-  </script>
-  <script type="text/javascript" src="js/bootstrap.js"></script>
+    <head>
+        <title>TV-Girl</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+    </head>
+    <body>
+        <div id="reagentTarget"></div>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script>
+        window.$ = require('./js/jquery.min');
+        window.jQuery = window.$; // bootstrap needs this
+    </script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/ui-core.js"></script>
 </html>

@@ -1,3 +1,55 @@
 body {
-    background-color: #6ad;
+    /* background-color: #6ad; */
+}
+
+tr.program {
+    font-size: larger;
+}
+
+.middle-btn {
+    width: 90px;
+    margin-bottom: 10px;
+}
+
+tr.program div {
+    display: inline-block;
+    line-height: 40px;
+}
+.table-bordered tbody tr.program {
+    padding: 0;
+}
+.table-bordered tbody tr.program td {
+    padding: 0;
+}
+tr.program .del-mark {
+    width: 24px;
+    text-align: center;
+    cursor: pointer;
+
+    overflow: visible!important;
+    /* ↑jQueryでアニメーションするとき、
+    overflow:hideenが設定され、レイアウトが崩れるのを回避する
+     */
+}
+tr.program .pg-title {
+    padding-left: 4px;
+}
+tr.program .row-control {
+    text-align: right;
+}
+tr.program .row-control .row-del {
+    width: 48px;
+    text-align: center;
+    display: none;
+    color: #fff;
+    background-color: #f00;
+    padding-left: 4px;
+    padding-right: 4px;
+    cursor: pointer;
+}
+.sort-handle {
+    width: 24px;
+    text-align: center;
+    cursor: grab;
+    cursor: -webkit-grab;
 }
