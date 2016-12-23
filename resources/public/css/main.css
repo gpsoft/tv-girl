@@ -11,9 +11,12 @@ tr.program {
     margin-bottom: 10px;
 }
 
-tr.program div {
-    display: inline-block;
+tr.program td > div {
+    /* display: inline-block; */
     line-height: 40px;
+}
+tr.program td > div .glyphicon {
+    line-height: inherit;
 }
 .table-bordered tbody tr.program {
     padding: 0;
@@ -23,8 +26,11 @@ tr.program div {
 }
 tr.program .del-mark {
     width: 24px;
+    line-height: 37px;
     text-align: center;
+    color: #f00;
     cursor: pointer;
+    float: left;
 
     overflow: visible!important;
     /* ↑jQueryでアニメーションするとき、
@@ -33,6 +39,14 @@ tr.program .del-mark {
 }
 tr.program .pg-title {
     padding-left: 4px;
+    float: left;
+}
+tr.program .pg-title input {
+    margin-left: -3px;
+    padding-left: 2px;
+    border: 1px solid #faa;
+    background-color: #fee;
+    line-height: 1.2em;
 }
 tr.program .row-control {
     text-align: right;
@@ -46,10 +60,23 @@ tr.program .row-control .row-del {
     padding-left: 4px;
     padding-right: 4px;
     cursor: pointer;
+    float: left;
 }
 .sort-handle {
     width: 24px;
     text-align: center;
+    line-height: 37px;
     cursor: grab;
     cursor: -webkit-grab;
+    float: left;
+}
+.size-dial {
+    float: left;
+    margin-right: 8px;
+}
+.size-dial div.size-up,
+.size-dial div.size-down {
+    display: block;
+    line-height: 19px;
+    font-size: 0.7em;
 }

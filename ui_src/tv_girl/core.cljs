@@ -47,7 +47,7 @@
   (->> inidata
        (reduce pglist-collector [])
        (drop 1)
-       (map parse-pg (range))))
+       (mapv parse-pg (range))))
 
 (defn pg->attr
   [{:keys [id size title path]}]
@@ -104,7 +104,7 @@
 
 (defn- compose-pg-single
   [ix title path]
-  (println title path)
+  #_(println title path)
   (join-lines
     [(mk-ini-section "Prog_" ix)
      (mk-ini-entry "ProgName" title)

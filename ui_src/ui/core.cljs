@@ -44,7 +44,7 @@
              (swap! app-state assoc :play-list)
              (:play-list)
              (map :title)
-             println))))
+             #_println))))
 
 (defn save-play-list
   []
@@ -117,6 +117,22 @@
       (.remove $tr)
       (.hide $target "fast" show-del-mark))))
 
+(defn click-title
+  [ev item]
+  (swap! app-state assoc :editing item))
+
+(defn index-in-pglist
+  [id]
+  (let [ixs (keep-indexed #(when (= (:id %2) id) %1) (:play-list @app-state))]
+    (first ixs)))
+
+(defn size-dial
+  [id delta]
+  (swap! app-state dissoc :editing)
+  (swap! app-state update-in [:play-list (index-in-pglist id) :size]
+         #(let [new-size (+ % delta)]
+           (if (>= new-size 0) new-size 0))))
+
 (defn col3-row
   [left middle right]
   [:div.row
@@ -151,16 +167,46 @@
   []
   [:div.del-mark
    {:on-click click-del-mark}
-   [:span.glyphicon.glyphicon-minus]])
+   [:span.glyphicon.glyphicon-minus-sign]])
 
 (defn row-handle
-  []
+  [item]
   [:div.row-control.pull-right
-   [:div.row-del.pull-right
+   [:div.size-dial
+    [:div.size-up
+     {:on-click #(size-dial (:id item) 1)}
+     [:span.glyphicon.glyphicon-triangle-top]]
+    [:div.size-down
+     {:on-click #(size-dial (:id item) -1)}
+     [:span.glyphicon.glyphicon-triangle-bottom]]]
+   [:div.sort-handle
+    [:span.glyphicon.glyphicon-menu-hamburger]]
+   [:div.row-del
     {:on-click click-row-del}
     "削除"]
-   [:div.sort-handle.pull-right
-    [:span.glyphicon.glyphicon-sort]]])
+   ])
+
+(defn finish-editing
+  [id ev]
+  (let [new-title (-> ev .-currentTarget .-value)]
+    (swap! app-state assoc-in [:play-list (index-in-pglist id) :title] new-title))
+  (swap! app-state dissoc :editing))
+
+(defn pg-title
+  [item]
+  (let [editing-item (:editing @app-state)]
+    (if (= item editing-item)
+      [:div.pg-title
+       [:input
+        {:type "text"
+         :name "pg-title"
+         :size 15
+         :defaultValue (:title editing-item)
+         :on-blur #(finish-editing (:id editing-item) %)}]]
+      [:div.pg-title
+       {:on-click #(click-title % item)}
+       (str (:title item) " (" (:size item) ")")]))
+  )
 
 (defn pg-tr
   [item]
@@ -168,9 +214,8 @@
    (tv/pg->attr item)
    [:td
     [del-mark]
-    [:div.pg-title
-     (:title item)]
-    [row-handle]]])
+    [pg-title item]
+    [row-handle item]]])
 
 (defn sortable-helper
   [_ $ui]
@@ -187,12 +232,19 @@
                        (.width w))))))
     $helper))
 
+(defn pg-sorted
+  [_ _]
+  (let [pg-list (->> (js/$ "#play-list tr")
+                  .toArray
+                  (mapv tv/dom->cljs))]
+    (swap! app-state assoc :play-list pg-list)))
+
 (defn pg-table
   []
   (reagent/create-class
     {:component-did-mount
      (fn [this]
-       (println "did-mount")
+       #_(println "did-mount")
        (-> this
            reagent/dom-node
            js/$
@@ -200,8 +252,15 @@
                            :cursor "move"
                            :scroll true
                            :items "tr"
+                           :handle ".sort-handle"
                            :helper sortable-helper
+                           :stop pg-sorted
                            })))
+     ; :component-did-update
+     ; (fn [this]
+     ;   (when-let [editing-item (:editing @app-state)]
+     ;     (-> (js/$ ".pg-title input")
+     ;         .focus)))
      :reagent-render
      (fn []
        [bordered-table
